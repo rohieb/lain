@@ -62,7 +62,7 @@ function task:show(scr_pos)
                                          position = task.position,
                                          fg = task.fg,
                                          bg = task.bg,
-                                         timeout = task.timeout,
+                                         timeout = 0,
                                          screen = scrp
                                      })
 end
