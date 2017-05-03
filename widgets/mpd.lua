@@ -32,8 +32,8 @@ local function worker(args)
     local args        = args or {}
     local timeout     = args.timeout or 2
     local password    = args.password or ""
-    local host        = args.host or "127.0.0.1"
-    local port        = args.port or "6600"
+    local host        = args.host or os.getenv("MPD_HOST") or "127.0.0.1"
+    local port        = args.port or os.getenv("MPD_PORT") or "6600"
     local music_dir   = args.music_dir or os.getenv("HOME") .. "/Music"
     local cover_size  = args.cover_size or 100
     local default_art = args.default_art or ""
