@@ -28,26 +28,29 @@ local setmetatable = setmetatable
 local fs = {}
 local fs_notification  = nil
 
-function fs:hide()
+function fs.hide()
     if fs_notification ~= nil then
         naughty.destroy(fs_notification)
         fs_notification = nil
     end
 end
 
-function fs:show(t_out)
-    fs:hide()
+function fs.show(seconds, options, scr)
+    fs.hide()
 
-    local ws = helpers.read_pipe(helpers.scripts_dir .. "dfs"):gsub("\n*$", "")
+    local cmd = (options and string.format("dfs %s", options)) or "dfs"
+    local ws = helpers.read_pipe(helpers.scripts_dir .. cmd):gsub("\n*$", "")
 
     if fs.followmouse then
         fs.notification_preset.screen = mouse.screen
+    elseif scr then
+        fs.notification_preset.screen = scr
     end
 
     fs_notification = naughty.notify({
         preset  = fs.notification_preset,
         text    = ws,
-        timeout = t_out
+        timeout = seconds or 5
     })
 end
 
@@ -114,8 +117,8 @@ local function worker(args)
     end
 
     if showpopup == "on" then
-        fs.widget:connect_signal('mouse::enter', function () fs:show(0) end)
-        fs.widget:connect_signal('mouse::leave', function () fs:hide() end)
+       fs.widget:connect_signal('mouse::enter', function () fs.show(0) end)
+       fs.widget:connect_signal('mouse::leave', function () fs.hide() end)
     end
 
     helpers.newtimer(partition, timeout, update)
